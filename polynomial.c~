@@ -1,0 +1,174 @@
+#include<stdio.h>
+#include<stdlib.h>
+int cf,fre;
+struct poly{
+ int deg;
+ int coef;
+ }term[100];
+void polyadd(int af,int al,int bf,int bl);
+void polyadd(int af,int al,int bf,int bl)
+{
+ int p,q;
+ p=af;
+ q=bf;
+ while(p<=al&&q<=bl)
+ {
+  if(term[p].deg==term[q].deg)
+  {
+   term[fre].deg=term[p].deg;
+   term[fre].coef=term[p].coef+term[q].coef;
+   p++;
+   q++;
+   fre++;
+  }
+  else if(term[p].deg>term[q].deg)
+  {
+   term[fre].deg=term[p].deg;
+   term[fre].coef=term[p].coef;
+   p++;
+   fre++;
+  }
+  else if(term[q].deg>term[p].deg)
+  {
+   term[fre].deg=term[q].deg;
+   term[fre].coef=term[q].coef;
+   q++;
+   fre++;
+  }
+ }
+ while(p<=al)
+ {
+  term[fre].deg=term[p].deg;
+  term[fre].coef=term[p].coef;
+  p++;
+  fre++;
+ }
+ while(q<=bl)
+ {
+  term[fre].deg=term[q].deg;
+  term[fre].coef=term[q].coef;
+  q++;
+  fre++;
+ }
+}
+void polymult(int af,int al,int bf,int bl);
+void polymult(int af,int al,int bf,int bl)
+{
+ int p,q,r,s,dg,co,count;
+ struct poly temp;
+ for(p=af;p<=al;p++)
+  for(q=bf;q<=bl;q++)
+  {
+   dg=term[p].deg+term[q].deg;
+   co=term[p].coef*term[q].coef;
+   count=0;
+   for(r=cf;r<fre;r++)
+    if(term[r].deg==dg)
+    {
+     term[r].coef+=co;
+     count=1;
+    }
+   if(!count)
+   {
+    term[fre].deg=dg;
+    term[fre].coef=co;
+    fre++;
+   }
+  }
+ for(r=cf;r<fre;r++)
+  for(s=(r+1);s<fre;s++)
+   if(term[s].deg>term[r].deg)
+   {
+    temp=term[s];
+    term[s]=term[r];
+    term[r]=temp;
+   }
+}
+void polynomial();
+void polynomial()
+{
+ int opt;
+ do
+ {
+  printf("1. Add two polynomials\n2. Multiply two polynomials\n3. Exit\nChoose an option.. ");
+  scanf("%d",&opt);
+  switch(opt)
+  {
+   case 1:{
+           int af,al,bf,bl,m,n,i;
+           printf("Enter the number of terms of f(x) ");
+           scanf("%d",&n);
+           af=0;
+           al=n-1;
+           printf("Enter the number of terms of g(x) ");
+           scanf("%d",&m);
+           bf=n;
+           bl=n+m-1;
+           for(i=0;i<n;i++)
+           {
+            printf("Enter the coefficient and degree of %dth term of f(x) ",i+1);
+            scanf("%d %d",&term[i].coef,&term[i].deg);
+           }
+           for(i=n;i<(n+m);i++)
+           {
+            printf("Enter the coefficient and degree of %dth term of g(x) ",i-n+1);
+            scanf("%d %d",&term[i].coef,&term[i].deg);
+           }
+           printf("f(x) is ");
+           for(i=af;i<al;i++)
+            printf("(%d)x%d+",term[i].coef,term[i].deg);
+           printf("(%d)x%d",term[i].coef,term[i].deg);
+           printf("\ng(x) is ");
+           for(i=bf;i<bl;i++)
+            printf("(%d)x%d+",term[i].coef,term[i].deg);
+           printf("(%d)x%d",term[i].coef,term[i].deg);
+           cf=fre=n+m;
+           polyadd(af,al,bf,bl);
+           printf("\nThe added polynomial is ");
+           for(i=cf;i<(fre-1);i++)
+            printf("(%d)x%d+",term[i].coef,term[i].deg);
+           printf("(%d)x%d",term[i].coef,term[i].deg);
+           break;
+          }
+   case 2:{
+           int af,al,bf,bl,m,n,i;
+           printf("Enter the number of terms of f(x) ");
+           scanf("%d",&n);
+           af=0;
+           al=n-1;
+           printf("Enter the number of terms of g(x) ");
+           scanf("%d",&m);
+           for(i=0;i<(n*m);i++)
+            term[i].deg=term[i].coef=0;
+           bf=n;
+           bl=n+m-1;
+           for(i=0;i<n;i++)
+           {
+            printf("Enter the coefficient and degree of %dth term of f(x) ",i+1);
+            scanf("%d %d",&term[i].coef,&term[i].deg);
+           }
+           for(i=n;i<(n+m);i++)
+           {
+            printf("Enter the coefficient and degree of %dth term of g(x) ",i-n+1);
+            scanf("%d %d",&term[i].coef,&term[i].deg);
+           }
+           printf("f(x) is ");
+           for(i=af;i<al;i++)
+            printf("(%d)x%d+",term[i].coef,term[i].deg);
+           printf("(%d)x%d",term[i].coef,term[i].deg);
+           printf("\ng(x) is ");
+           for(i=bf;i<bl;i++)
+            printf("(%d)x%d+",term[i].coef,term[i].deg);
+           printf("(%d)x%d",term[i].coef,term[i].deg);
+           cf=fre=n+m;
+           polymult(af,al,bf,bl);
+           printf("\nThe multiplied polynomial is ");
+           for(i=cf;i<(fre-1);i++)
+            printf("(%d)x%d+",term[i].coef,term[i].deg);
+           printf("(%d)x%d",term[i].coef,term[i].deg);
+           break;
+          }
+   case 3:exit(0);
+  }
+ }while(1);
+}

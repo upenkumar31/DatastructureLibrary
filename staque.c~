@@ -1,0 +1,449 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct linkstack
+{
+	int data;
+	struct linkstack *next;
+}stack;
+stack *top=NULL;
+void spush(int);
+int spop();
+void stackprint();
+void stackfreeall();
+void spush(int x)
+{
+	stack *q=(stack *)malloc(sizeof(stack));
+	if(q==NULL)
+	{
+		printf("Stack overflow");
+		exit(0);
+	}
+	q->data=x;
+	q->next=top;
+	top=q;
+}
+int spop()
+{
+	stack *q;
+	int x;
+	if(top==NULL)
+		return NULL;
+	q=top;
+	top=top->next;
+	x=q->data;
+	free(q);
+	return x;
+}
+void stackprint()
+{
+	stack *q=top;
+	if(top==NULL)
+		printf("Stack underflow");
+	else
+	{
+		printf("The stack contains\n");
+		while(q!=NULL)
+		{
+			printf("%d ",q->data);
+			q=q->next;
+		}
+	}
+	printf("\n");
+}
+void stackfreeall()
+{
+	stack *q;
+	while(top!=NULL)
+	{
+		q=top;
+		top=top->next;
+		free(q);
+	}
+}
+void stacklink();
+void stacklink()
+{
+	int ch,x,yes=1;
+	do
+	{
+		printf("1. Push\n2. Pop\n3. Display\n4. Exit\nChoose an option.. ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the element to be pushed ");
+			       scanf("%d",&x);
+			       spush(x);
+			       stackprint();
+			       break;
+			case 2:x=spop();
+			       if(x==NULL)
+			       		printf("Stack underflow");
+			       else
+			       		printf("The popped element is %d\n",x);
+			       break;
+			case 3:stackprint();
+			       break;
+			case 4:stackfreeall();
+			       yes=0;
+			default:printf("Wrong choice. Choose again..");
+		}
+	}while(yes);
+}
+typedef struct linkedqueue
+{
+	int data;
+	struct linkedqueue *next;
+}queue;
+queue *qfront=NULL,*qrear=NULL;
+void qinsert(int);
+int qdelete();
+void qprint();
+void qfreeall();
+void qinsert(int x)
+{
+	queue *q=(queue *)malloc(sizeof(queue));
+	if(q==NULL)
+	{
+		printf("Queue overflow");
+		exit(0);
+	}
+	q->data=x;
+	q->next=NULL;
+	if(qfront==NULL)
+		qfront=q;
+	else
+		qrear->next=q;
+	qrear=q;
+}
+int qdelete()
+{
+	queue *q;
+	int x;
+	if(qfront==NULL)
+		return NULL;
+	x=qfront->data;
+	q=qfront;
+	qfront=qfront->next;
+	free(q);
+	return x;
+}
+void qprint()
+{
+	queue *q=qfront;
+	if(qfront==NULL)
+		printf("Queue underflow");
+	else
+	{
+		printf("The queue contains\n");
+		while(q!=NULL)
+		{
+			printf("%d ",q->data);
+			q=q->next;
+		}
+	}
+	printf("\n");
+}
+void qfreeall()
+{
+	queue *q;
+	while(qfront!=NULL)
+	{
+		q=qfront;
+		qfront=qfront->next;
+		free(q);
+	}
+}
+void queuelink();
+void queuelink()
+{
+	int ch,x,yes=1;
+	do
+	{
+		printf("1. Insert\n2. Delete\n3. Display\n4. Exit\nChoose an option.. ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the element to be inserted ");
+			       scanf("%d",&x);
+			       qinsert(x);
+			       qprint();
+			       break;
+			case 2:x=qdelete();
+			       if(x==NULL)
+			       		printf("Queue underflow");
+			       else
+			       		printf("The deleted element is %d\n",x);
+			       break;
+			case 3:qprint();
+			       break;
+			case 4:qfreeall();
+			       yes=0;
+			default:printf("Wrong choice. Choose again..");
+		}
+	}while(yes);
+}
+typedef struct circlink
+{
+	int data;
+	struct circlink *next;
+}cqueue;
+cqueue *cfront=NULL,*crear=NULL;
+void cqueueinsert(int);
+int cqueuedelete();
+void cqueueprint();
+void cqueuefreeall();
+void cqueueinsert(int x)
+{
+	cqueue *q=(cqueue *)malloc(sizeof(cqueue));
+	if(q==NULL)
+	{
+		printf("Circular queue overflow");
+		exit(0);
+	}
+	q->data=x;
+	if(cfront==NULL)
+		cfront=q;
+	else
+		crear->next=q;
+	q->next=cfront;
+	crear=q;
+}
+int cqueuedelete()
+{
+	cqueue *q;
+	int x;
+	if(cfront==NULL)
+		return NULL;
+	x=cfront->data;
+	if(cfront!=crear)
+	{
+		q=cfront;
+		crear->next=cfront->next;
+		cfront=cfront->next;
+		free(q);
+		return x;
+	}
+	free(cfront);
+	cfront=crear=NULL;
+	return x;
+}
+void cqueueprint()
+{
+	cqueue *q=cfront->next;
+	if(cfront==NULL)
+		printf("Circular queue underflow");
+	else
+	{
+		printf("The circular queue contains\n");
+		printf("%d ",cfront->data);
+		while(q!=cfront)
+		{
+			printf("%d ",q->data);
+			q=q->next;
+		}
+	}
+	printf("\n");
+}
+void cqueuefreeall()
+{
+	cqueue *q;
+	while(cfront!=crear)
+	{
+		q=cfront;
+		cfront=cfront->next;
+		free(q);
+	}
+	free(crear);
+}
+void circlink();
+void circlink()
+{
+	int ch,x,yes=1;
+	do
+	{
+		printf("1. Insert\n2. Delete\n3. Display\n4. Exit\nChoose an option.. ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the element to be inserted ");
+			       scanf("%d",&x);
+			       cqueueinsert(x);
+			       cqueueprint();
+			       break;
+			case 2:x=cqueuedelete();
+			       if(x==NULL)
+			       		printf("Circular queue underflow");
+			       else
+			       		printf("The deleted element is %d\n",x);
+			       break;
+			case 3:cqueueprint();
+			       break;
+			case 4:cqueuefreeall();
+			       yes=0;
+			default:printf("Wrong choice. Choose again..");
+		}
+	}while(yes);
+}
+typedef struct dequelink
+{
+	int data;
+	struct dequelink *next;
+}deque;
+deque *dfront=NULL,*drear=NULL;
+void dinsfront(int);
+void dinsrear(int);
+int ddelfront();
+int ddelrear();
+void dequeprint();
+void dequefreeall();
+void dinsfront(int x)
+{
+	deque *q=(deque *)malloc(sizeof(deque));
+	if(q==NULL)
+	{
+		printf("Deque overflow");
+		exit(0);
+	}
+	q->data=x;
+	q->next=dfront;
+	dfront=q;
+	if(drear==NULL)
+		drear=q;
+}
+void dinsrear(int x)
+{
+	deque *q=(deque *)malloc(sizeof(deque));
+	if(q==NULL)
+	{
+		printf("Deque overflow");
+		exit(0);
+	}
+	q->data=x;
+	q->next=NULL;
+	if(dfront==NULL)
+		dfront=q;
+	else
+		drear->next=q;
+	drear=q;
+}
+int ddelfront()
+{
+	deque *q;
+	int x;
+	if(dfront==NULL)
+		return NULL;
+	q=dfront;
+	x=dfront->data;
+	dfront=dfront->next;
+	free(q);
+	return x;
+}
+int ddelrear()
+{
+	deque *q=dfront;
+	int x;
+	if(dfront=NULL)
+		return NULL;
+	if(dfront==drear)
+	{
+		x=dfront->data;
+		free(dfront);
+		dfront=drear=NULL;
+		return x;
+	}
+	while(q->next!=drear)
+		q=q->next;
+	q->next=drear->next;
+	x=drear->data;
+	free(drear);
+	drear=q;
+	return x;
+}
+void dequeprint()
+{
+	deque *q=dfront;
+	if(dfront==NULL)
+		printf("Deque underflow");
+	else
+	{
+		printf("The deque contains\n");
+		while(q!=NULL)
+		{
+			printf("%d ",q->data);
+			q=q->next;
+		}
+	}
+	printf("\n");
+}
+void dequefreeall()
+{
+	deque *q;
+	while(dfront!=NULL)
+	{
+		q=dfront;
+		dfront=dfront->next;
+		free(q);
+	}
+}
+void dequelink();
+void dequelink()
+{
+	int ch,x,yes=1;
+	do
+	{
+		printf("1. Insert from front\n2. Insert from rear\n3. Delete from front\n4. Delete from rear\n5. Display\n6. Exit\nChoose an option.. ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the element to be inserted ");
+			       scanf("%d",&x);
+			       dinsfront(x);
+			       dequeprint();
+			       break;
+			case 2:printf("Enter the element to be inserted ");
+			       scanf("%d",&x);
+			       dinsrear(x);
+			       dequeprint();
+			       break;
+			case 3:x=ddelfront();
+			       if(x==NULL)
+			       		printf("Deque underflow");
+			       else
+			       		printf("The deleted element is %d\n",x);
+			       break;
+			case 4:x=ddelrear();
+			       if(x==NULL)
+			       		printf("Deque underflow");
+			       else
+			       		printf("The deleted element is %d\n",x);
+			       break;
+			case 5:dequeprint();
+			       break;
+			case 6:dequefreeall();
+			       yes=0;
+			default:printf("Wrong choice. Choose again..");
+		}
+	}while(yes);
+}
+void staque();
+void staque()
+{
+	int opt,yes=1;
+	do
+	{
+		printf("1. Stacks\n2. Queues\n3. Circular queues\n4. Dequeues\n5. Go back\nChoose an option.. ");
+		scanf("%d",&opt);
+		switch(opt)
+		{
+			case 1:stacklink();
+			       break;
+			case 2:queuelink();
+			       break;
+			case 3:circlink();
+			       break;
+			case 4:dequelink();
+			       break;
+			case 5:yes=0;
+		}
+	}while(yes);
+}

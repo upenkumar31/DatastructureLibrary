@@ -1,0 +1,21 @@
+#include<stdio.h>
+void trimatrix(int a[10],int n)
+ int i,j,up=0,lw=0;
+ 
+ for(i=0;i<n;i++)
+  for(j=0;j<n;j++)
+  {
+   if(i>j&&a[i][j]!=0)
+    up=1;
+   if(i<j&&a[i][j]!=0)
+    lw=1;
+  }
+ if(up==0&&lw==0)
+  printf("The matrix is diagonal matrix");
+ else if(up==0)
+  printf("The matrix is upper triangled");
+ else if(lw==0)
+  printf("The matrix is lower triangled");
+ else
+  printf("The matrix is regular matrix");
+}

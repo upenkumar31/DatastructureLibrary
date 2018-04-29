@@ -1,0 +1,36 @@
+#include<stdio.h>
+int main()
+{
+ int a[100][100],i,j,id=0,di=0,n;
+ printf("Enter the order of the matrix ");
+ scanf("%d",&n);
+ printf("Enter the elements\n");
+ for(i=0;i<n;i++)
+  for(j=0;j<n;j++)
+   scanf("%d",&a[i][j]);
+ printf("\nThe matrix is\n");
+ for(i=0;i<n;i++)
+ {
+  for(j=0;j<n;j++)
+   printf("%d\t",a[i][j]);
+  printf("\n");
+ }
+ for(i=0;i<n;i++)
+  for(j=0;j<n;j++)
+  {
+   if(i!=j&&a[i][j]!=0)
+    di=1;
+   if(i==j&&a[i][j]!=1)
+    id=1;
+  }
+ if(!di)
+ {
+  if(!id)
+   printf("The matrix is identity matrix");
+  else
+   printf("The matrix is diagonal matrix");
+ }
+ else
+  printf("The matrix is ordinary matrix");
+ return 0;
+}

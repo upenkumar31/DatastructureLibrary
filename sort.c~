@@ -1,0 +1,208 @@
+#include<stdio.h>
+int a[10];
+void bubsort(int a[10],int n);
+void bubsort(int a[10],int n)
+{
+ int i,j,temp;
+ for(i=(n-1);i>0;i--)
+  for(j=0;j<i;j++)
+   if(a[j]>a[j+1])
+   {
+    temp=a[j];
+    a[j]=a[j+1];
+    a[j+1]=temp;
+   }
+}
+void selsort(int a[10],int n);
+void selsort(int a[10],int n)
+{
+ int i,imax,j,temp;
+ for(i=(n-1);i>0;i--)
+ {
+  imax=0;
+  for(j=0;j<=i;j++)
+   if(a[j]>a[imax])
+    imax=j;
+   temp=a[i];
+   a[i]=a[imax];
+   a[imax]=temp;
+  }
+}
+void inssort(int a[10],int n);
+void inssort(int a[10],int n)
+{
+ int i,j,key;
+ for(i=1;i<n;i++)
+ {
+  key=a[i];
+  j=i-1;
+  while(j>=0&&a[j]>key)
+  {
+   a[j+1]=a[j];
+   j--;
+  }
+  a[j+1]=key;
+ }
+}
+int mergesort(int,int);
+void merge(int,int,int);
+int mergesort(int start,int end)
+{
+ int mid;
+ if((end-start)<2)
+  return 1;
+ mid=(end+start)/2;
+ mergesort(start,mid);
+ mergesort(mid,end);
+ merge(start,mid,end);
+}
+void merge(int start,int mid,int end)
+{
+ int i,j,k,b[10],c[10];
+ for(i=start;i<mid;i++)
+  b[i-start]=a[i];
+ for(i=mid;i<end;i++)
+  c[i-mid]=a[i];
+ i=j=0;
+ k=start;
+ while(i<(mid-start)&&j<(end-mid))
+ {
+  if(b[i]<=c[j])
+  {
+   a[k]=b[i];
+   i++;
+  }
+  else
+  {
+   a[k]=c[j];
+   j++;
+  }
+  k++;
+ }
+ while(i<(mid-start))
+ {
+  a[k]=b[i];
+  i++;
+  k++;
+ }
+ while(j<(end-mid))
+ {
+  a[k]=c[j];
+  j++;
+  k++;
+ }
+}
+int partition(int,int);
+void quicksort(int,int);
+void quicksort(int low,int high)
+{
+ int p;
+ if(low<high)
+ {
+  p=partition(low,high);
+  quicksort(low,p);
+  quicksort((p+1),high);
+ }
+}
+int partition(int low,int high)
+{
+ int p=low,q=high,pivot=a[low],temp;
+ while(p<q)
+ {
+  while(a[p]<pivot)
+   p++;
+  while(a[q]>pivot)
+   q--;
+  if(p<q)
+  {
+   temp=a[p];
+   a[p]=a[q];
+   a[q]=temp;
+  }
+ }
+ return q;
+}
+void sort();
+void sort()
+{
+ int opt,yes=1;
+ do
+ {
+  printf("1. Bubble sort\n2. Selection sort\n3. Insertion sort\n4. Merge sort\n5. Quick sort\n6. Go back\nChoose an option.. ");
+  scanf("%d",&opt);
+  switch(opt)
+  {
+   case 1:{
+           int a[10],i,n;
+           printf("Enter the number of elements ");
+           scanf("%d",&n);
+           printf("Enter the elements ");
+           for(i=0;i<n;i++)
+            scanf("%d",&a[i]);
+           bubsort(a,n);
+           printf("Using bubble sort the sorted elements are\n");
+           for(i=0;i<n;i++)
+            printf("%d ",a[i]);
+           printf("\n");
+           break;
+          }
+   case 2:{
+           int a[10],i,n;
+           printf("Enter the number of elements ");
+           scanf("%d",&n);
+           printf("Enter the elements ");
+           for(i=0;i<n;i++)
+            scanf("%d",&a[i]);
+           selsort(a,n);
+           printf("Using selection sort the sorted elements are\n");
+           for(i=0;i<n;i++)
+            printf("%d ",a[i]);
+           printf("\n");
+           break;
+          }
+   case 3:{
+           int a[10],i,n;
+           printf("Enter the number of elements ");
+           scanf("%d",&n);
+           printf("Enter the elements ");
+           for(i=0;i<n;i++)
+            scanf("%d",&a[i]);
+           inssort(a,n);
+           printf("Using insertion sort the sorted elements are\n");
+           for(i=0;i<n;i++)
+            printf("%d ",a[i]);
+           printf("\n");
+           break;
+          }
+   case 4:{
+           int i,n;
+           printf("Enter the number of elements ");
+           scanf("%d",&n);
+           printf("Enter the elements ");
+           for(i=0;i<n;i++)
+            scanf("%d",&a[i]);
+           mergesort(0,n);
+           printf("Using merge sort the sorted elements are\n");
+           for(i=0;i<n;i++)
+            printf("%d ",a[i]);
+           printf("\n");
+           break;
+          }
+   case 5:{
+           int i,n;
+           printf("Enter the number of elements ");
+           scanf("%d",&n);
+           printf("Enter the elements ");
+           for(i=0;i<n;i++)
+            scanf("%d",&a[i]);
+           quicksort(0,n-1);
+           printf("Using quick sort the sorted elements are\n");
+           for(i=0;i<n;i++)
+            printf("%d ",a[i]);
+           printf("\n");
+           break;
+          }
+   case 6:yes=0;
+  }
+ }while(yes);
+}

@@ -1,0 +1,47 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include"clist.c"
+typedef struct circlist
+{
+	int data;
+	struct circlist *next;
+}clist;
+int main()
+{
+	clist *head=(clist *)malloc(sizeof(clist));
+	if(head==NULL)
+	{
+		printf("Sorry!!");
+		exit(0);
+	}
+	head->next=head;
+	int ch,n,pos;
+	do
+	{
+		printf("1. Create the list\n2. Insert at any position\n3. Delete at any position\n4. Print the list\nChoose an option or any other to exit ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the number of nodes ");
+			       scanf("%d",&n);
+			       create(head,n);
+			       print(head);
+			       break;
+			case 2:printf("Enter element to insert and the position ");
+			       scanf("%d %d",&n,&pos);
+			       head=insert(head,n,pos);
+			       print(head);
+			       break;
+			case 3:printf("Enter the position whose element is to be deleted ");
+			       scanf("%d",&pos);
+			       head=delete(head,pos);
+			       print(head);
+			       break;
+			case 4:print(head);
+			       break;
+			default:freeall(head);
+			        exit(0);
+		}
+	}while(1);
+	return 0;
+}

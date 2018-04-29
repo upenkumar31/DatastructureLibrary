@@ -1,0 +1,651 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct singlist
+{
+	int data;
+	struct singlist *next;
+}slist;
+void screate(slist *,int);
+slist * sinsert(slist *,int,int);
+slist * sdelete(slist *,int);
+void sprint(slist *);
+int scount(slist *);
+void ssearch(slist *,int);
+void sfreeall(slist *);
+void screate(slist *p,int n)
+{
+	int x,i;
+	slist *q;
+	for(i=1;i<=n;i++)
+	{
+		printf("Enter value ");
+		scanf("%d",&x);
+		p->data=x;
+		if(i!=n)
+		{
+			q=(slist *)malloc(sizeof(slist));
+			if(q==NULL)
+			{
+				printf("Sorry!!");
+				exit(0);
+			}
+			q->next=p->next;
+			p->next=q;
+			p=q;
+		}
+	}
+}
+slist * sinsert(slist *p,int x,int pos)
+{
+	slist *q=(slist *)malloc(sizeof(slist)),*r=p;
+	if(q==NULL)
+	{
+		printf("Sory!!");
+		exit(0);
+	}
+	q->data=x;
+	if(pos==1)
+	{
+		q->next=p;
+		r=q;
+	}
+	else if(pos==(scount(p)+1))
+	{
+		while(p->next!=NULL)
+			p=p->next;
+		q->next=NULL;
+		p->next=q;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			ct++;
+			p=p->next;
+		}
+		q->next=p->next;
+		p->next=q;
+	}
+	return r;
+}
+slist * sdelete(slist *p,int pos)
+{
+	slist *q=p,*r=p;
+	if(pos==1)
+	{
+		p=p->next;
+		free(q);
+		r=p;
+	}
+	else if(pos==scount(p))
+	{
+		while(p->next->next!=NULL)
+			p=p->next;
+		q=p->next;
+		free(q);
+		p->next=NULL;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			p=p->next;
+			ct++;
+		}
+		q=p->next;
+		p->next=p->next->next;
+		free(q);
+	}
+	return r;
+}
+void sprint(slist *p)
+{
+	printf("The list contains ");
+	while(p!=NULL)
+	{
+		printf("%d ",p->data);
+		p=p->next;
+	}
+	printf("\n");
+}
+int scount(slist *p)
+{
+	int ct=0;
+	while(p!=NULL)
+	{
+		ct++;
+		p=p->next;
+	}
+	return ct;
+}
+void ssearch(slist *p,int x)
+{
+	int pos=1;
+	printf("The element was found at ");
+	while(p!=NULL)
+	{
+		if(p->data==x)
+			printf("%d ",pos);
+		pos++;
+		p=p->next;
+	}
+	printf("\n");
+}
+void sfreeall(slist *p)
+{
+	slist *q;
+	while(p!=NULL)
+	{
+		q=p;
+		p=p->next;
+		free(q);
+	}
+}
+void s_list();
+void s_list()
+{
+	slist *head=(slist *)malloc(sizeof(slist));
+	if(head==NULL)
+	{
+		printf("Sorry!!");
+		exit(0);
+	}
+	head->next=NULL;
+	int ch,n,pos,yes=1;
+	do
+	{
+		printf("1. Create the list\n2. Insert at any position\n3. Delete at any position\n4. Print the list\n5. Count umber of nodes\n6. Search for an element\nChoose an option or any other to exit ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the number of nodes ");
+			       scanf("%d",&n);
+			       screate(head,n);
+			       sprint(head);
+			       break;
+			case 2:printf("Enter element to insert and the position ");
+			       scanf("%d %d",&n,&pos);
+			       head=sinsert(head,n,pos);
+			       sprint(head);
+			       break;
+			case 3:printf("Enter the position whose element is to be deleted ");
+			       scanf("%d",&pos);
+			       head=sdelete(head,pos);
+			       sprint(head);
+			       break;
+			case 4:sprint(head);
+			       break;
+			case 5:printf("The list contains %d nodes\n",scount(head));
+			       break;
+			case 6:printf("Enter the element which is to be searched ");
+			       scanf("%d",&n);
+			       ssearch(head,n);
+			       break;
+			default:sfreeall(head);
+			        yes=0;
+		}
+	}while(yes);
+}
+int stck[20];
+int top=-1;
+void rcreate(slist *,int);
+void rprint(slist *);
+void rreverse(slist *p);
+void rfreeall(slist *);
+void rcreate(slist *p,int n)
+{
+	int x,i;
+	slist *q;
+	for(i=1;i<=n;i++)
+	{
+		printf("Enter value ");
+		scanf("%d",&x);
+		p->data=x;
+		if(i!=n)
+		{
+			q=(slist *)malloc(sizeof(slist));
+			if(q==NULL)
+			{
+				printf("Sorry!!");
+				exit(0);
+			}
+			q->next=p->next;
+			p->next=q;
+			p=q;
+		}
+	}
+}
+void rprint(slist *p)
+{
+	printf("The list contains ");
+	while(p!=NULL)
+	{
+		printf("%d ",p->data);
+		p=p->next;
+	}
+	printf("\n");
+}
+void rreverse(slist *p)
+{
+	slist *q=p;
+	while(p!=NULL)
+	{
+		stck[++top]=p->data;
+		p=p->next;
+	}
+	while(q!=NULL)
+	{
+		q->data=stck[top--];
+		q=q->next;
+	}
+}
+void rfreeall(slist *p)
+{
+	slist *q;
+	while(p!=NULL)
+	{
+		q=p;
+		p=p->next;
+		free(q);
+	}
+}
+void r_list();
+void r_list()
+{
+	int n;
+	slist *head=(slist *)malloc(sizeof(slist));
+	if(head==NULL)
+	{
+		printf("Sorry!!");
+		exit(0);
+	}
+	head->next=NULL;
+	printf("Enter the number of nodes ");
+	scanf("%d",&n);
+	rcreate(head,n);
+	rprint(head);
+	rreverse(head);
+	printf("List reversed\n");
+	rprint(head);
+	rfreeall(head);
+}
+typedef struct doublist
+{
+	int data;
+	struct doublist *prev,*next;
+}dlist;
+void dcreate(dlist *,int);
+dlist * dinsert(dlist *,int,int);
+dlist * ddelete(dlist *,int);
+void dprint(dlist *);
+int dcount(dlist *);
+void dfreeall(dlist *);
+void dcreate(dlist *p,int n)
+{
+	int i,x;
+	dlist *q;
+	for(i=1;i<=n;i++)
+	{
+		printf("Enter value ");
+		scanf("%d",&x);
+		p->data=x;
+		if(i!=n)
+		{
+			q=(dlist *)malloc(sizeof(dlist));
+			if(q==NULL)
+			{
+				printf("Sorry!!");
+				exit(0);
+			}
+			q->next=p->next;
+			p->next=q;
+			q->prev=p;
+			p=q;
+		}
+	}
+}
+dlist * dinsert(dlist *p,int x,int pos)
+{
+	dlist *q=(dlist *)malloc(sizeof(dlist)),*r=p;
+	if(q==NULL)
+	{
+		printf("Sorry!!");
+		exit(0);
+	}
+	q->data=x;
+	if(pos==1)
+	{
+		q->next=p;
+		p->prev=q;
+		q->prev=NULL;
+		r=q;
+	}
+	else if(pos==(dcount(p)+1))
+	{
+		while(p->next!=NULL)
+			p=p->next;
+		p->next=q;
+		q->prev=p;
+		q->next=NULL;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			ct++;
+			p=p->next;
+		}
+		q->next=p->next;
+		q->prev=p;
+		p->next->prev=q;
+		p->next=q;
+	}
+	return r;
+}
+dlist * ddelete(dlist *p,int pos)
+{
+	dlist *q=p,*r=p;
+	if(pos==1)
+	{
+		p=p->next;
+		p->prev=NULL;
+		r=p;
+		free(q);
+	}
+	else if(pos==dcount(p))
+	{
+		while(p->next->next!=NULL)
+			p=p->next;
+		q=p->next;
+		free(q);
+		p->next=NULL;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			p=p->next;
+			ct++;
+		}
+		q=p->next;
+		p->next->next->prev=p;
+		p->next=p->next->next;
+		free(q);
+	}
+	return r;
+}
+void dprint(dlist *p)
+{
+	printf("The list contains ");
+	while(p!=NULL)
+	{
+		printf("%d ",p->data);
+		p=p->next;
+	}
+	printf("\n");
+}
+int dcount(dlist *p)
+{
+	int ct=0;
+	while(p!=NULL)
+	{
+		ct++;
+		p=p->next;
+	}
+	return ct;
+}
+void dfreeall(dlist *p)
+{
+	dlist *q;
+	while(p!=NULL)
+	{
+		q=p;
+		p=p->next;
+		free(q);
+	}
+}
+void d_list();
+void d_list()
+{
+	dlist *head=(dlist *)malloc(sizeof(dlist));
+	if(head==NULL)
+	{
+		printf("Sorry!!");
+		exit(0);
+	}
+	head->prev=head->next=NULL;
+	int ch,n,pos,yes=1;
+	do
+	{
+		printf("1. Create the list\n2. Insert at any position\n3. Delete at any position\n4. Print the list\nChoose an option or any other to exit ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the number of nodes ");
+			       scanf("%d",&n);
+			       dcreate(head,n);
+			       dprint(head);
+			       break;
+			case 2:printf("Enter element to insert and the position ");
+			       scanf("%d %d",&n,&pos);
+			       head=dinsert(head,n,pos);
+			       dprint(head);
+			       break;
+			case 3:printf("Enter the position whose element is to be deleted ");
+			       scanf("%d",&pos);
+			       head=ddelete(head,pos);
+			       dprint(head);
+			       break;
+			case 4:dprint(head);
+			       break;
+			default:dfreeall(head);
+			        yes=0;
+		}
+	}while(yes);
+}
+typedef struct circlist
+{
+	int data;
+	struct circlist *next;
+}clist;
+void ccreate(clist *,int);
+clist * cinsert(clist *,int,int);
+clist * cdelete(clist *,int);
+void cprint(clist *);
+int ccount(clist *);
+void cfreeall(clist *);
+void ccreate(clist *p,int n)
+{
+	int x,i;
+	clist *q;
+	for(i=1;i<=n;i++)
+	{
+		printf("Enter value ");
+		scanf("%d",&x);
+		p->data=x;
+		if(i!=n)
+		{
+			q=(clist *)malloc(sizeof(clist));
+			if(q==NULL)
+			{
+				printf("Sorry!!");
+				exit(0);
+			}
+			q->next=p->next;
+			p->next=q;
+			p=q;
+		}
+	}
+}
+clist * cinsert(clist *p,int x,int pos)
+{
+	clist *q=(clist *)malloc(sizeof(clist)),*r=p;
+	if(q==NULL)
+	{
+		printf("Sory!!");
+		exit(0);
+	}
+	q->data=x;
+	if(pos==1)
+	{
+		q->next=p;
+		while(p->next!=r)
+			p=p->next;
+		p->next=q;
+		r=q;
+	}
+	else if(pos==(ccount(p)+1))
+	{
+		while(p->next!=r)
+			p=p->next;
+		q->next=r;
+		p->next=q;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			ct++;
+			p=p->next;
+		}
+		q->next=p->next;
+		p->next=q;
+	}
+	return r;
+}
+clist * cdelete(clist *p,int pos)
+{
+	clist *q=p,*r=p;
+	if(pos==1)
+	{
+		q=p->next;
+		while(r->next!=p)
+			r=r->next;
+		r->next=q;
+		free(p);
+		r=q;
+	}
+	else if(pos==ccount(p))
+	{
+		while(p->next->next!=r)
+			p=p->next;
+		q=p->next;
+		free(q);
+		p->next=r;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			p=p->next;
+			ct++;
+		}
+		q=p->next;
+		p->next=p->next->next;
+		free(q);
+	}
+	return r;
+}
+void cprint(clist *p)
+{
+	clist *r=p;
+	printf("The list contains ");
+	printf("%d ",p->data);
+	p=p->next;
+	while(p!=r)
+	{
+		printf("%d ",p->data);
+		p=p->next;
+	}
+	printf("\n");
+}
+int ccount(clist *p)
+{
+	clist *r=p->next;
+	int ct=1;
+	while(p!=r)
+	{
+		ct++;
+		r=r->next;
+	}
+	return ct;
+}
+void cfreeall(clist *p)
+{
+	clist *q,*r=p;
+	p=p->next;
+	while(p!=r)
+	{
+		q=p;
+		p=p->next;
+		free(q);
+	}
+	free(r);
+}
+void c_list();
+void c_list()
+{
+	clist *head=(clist *)malloc(sizeof(clist));
+	if(head==NULL)
+	{
+		printf("Sorry!!");
+		exit(0);
+	}
+	head->next=head;
+	int ch,n,pos,yes=1;
+	do
+	{
+		printf("1. Create the list\n2. Insert at any position\n3. Delete at any position\n4. Print the list\nChoose an option or any other to exit ");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the number of nodes ");
+			       scanf("%d",&n);
+			       ccreate(head,n);
+			       cprint(head);
+			       break;
+			case 2:printf("Enter element to insert and the position ");
+			       scanf("%d %d",&n,&pos);
+			       head=cinsert(head,n,pos);
+			       cprint(head);
+			       break;
+			case 3:printf("Enter the position whose element is to be deleted ");
+			       scanf("%d",&pos);
+			       head=cdelete(head,pos);
+			       cprint(head);
+			       break;
+			case 4:cprint(head);
+			       break;
+			default:cfreeall(head);
+			        yes=0;
+		}
+	}while(yes);
+}
+void linklist();
+void linklist()
+{
+	int opt,yes=1;
+	do
+	{
+		printf("1. Work with singly linked lists\n2. Reverse a singly linked list\n3. Work with doubly linked lists\n4. Work with circular lists\n5. Go back\nChoose an option.. ");
+		scanf("%d",&opt);
+		switch(opt)
+		{
+			case 1:s_list();
+			       break;
+			case 2:r_list();
+			       break;
+			case 3:d_list();
+			       break;
+			case 4:c_list();
+			       break;
+			case 5:yes=0;
+		}
+	}while(yes);
+}

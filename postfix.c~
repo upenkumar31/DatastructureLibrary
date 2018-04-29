@@ -1,0 +1,102 @@
+#include<stdio.h>
+#include<math.h>
+int prec(char);
+int prec(char a)
+{
+	switch(a)
+	{
+		case '^':return 3;
+		case '*':
+		case '/':return 2;
+		case '+':
+		case '-':return 1;
+		default:return 0;
+	}
+}
+void inpost();
+void inpost()
+{
+	char x[100],stack[10];
+	int top=0,i=0;
+	stack[0]='#';
+	printf("Enter the infix expression ");
+	scanf("%s",x);
+	printf("The corresponding postfix expression is ");
+	while(x[i]!='\0')
+	{
+		if(x[i]>=65&&x[i]<=90)
+			printf("%c",x[i]);
+		else if(x[i]=='(')
+			stack[++top]='(';
+		else if(x[i]==')')
+		{
+			while(stack[top]!='(')
+				printf("%c",stack[top--]);
+			top--;
+		}
+		else if(x[i]=='^'||x[i]=='/'||x[i]=='*'||x[i]=='+'||x[i]=='-')
+		{
+			if(prec(x[i])>prec(stack[top]))
+				stack[++top]=x[i];
+			else
+			{
+				printf("%c",stack[top--]);
+				stack[++top]=x[i];
+			}
+		}
+		i++;
+	}
+	while(top!=0)
+		printf("%c",stack[top--]);
+}
+void evalpost();
+void evalpost()
+{
+	char ch;
+	int a,b,stack[20],top=-1;
+	printf("Enter an expression ");
+	getchar();
+	while(ch!='\n')
+	{
+		scanf("%c",&ch);
+		printf("%d",ch);
+		if(ch=='+'||ch=='-'||ch=='*'||ch=='/'||ch=='^')
+		{
+			a=stack[top--];
+			b=stack[top--];
+			switch(ch)
+			{
+				case '+':stack[++top]=(b+a);
+				         break;
+				case '-':stack[++top]=(b-a);
+				         break;
+				case '*':stack[++top]=(b*a);
+				         break;
+				case '/':stack[++top]=(b/a);
+				         break;
+				case '^':stack[++top]=pow(b,a);
+			}
+		}
+		else if(ch!='\n')
+			stack[++top]=(ch-48);
+	}
+	printf("The result is %d",stack[top]);
+}
+void postfix();
+void postfix()
+{
+	int opt,yes=1;
+	do
+	{
+		printf("1. Convert postfix to infix expresseion\n2. Evaluate a postfix expression\n3. Go back\nChoose an option... ");
+		scanf("%d",&opt);
+		switch(opt)
+		{
+			case 1:inpost();
+			       break;
+			case 2:evalpost();
+			       break;
+			case 3:yes=0;
+		}
+	}while(yes);
+}

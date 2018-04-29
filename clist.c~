@@ -1,0 +1,138 @@
+#include<stdio.h>
+#include<stdlib.h>
+void create(clist *,int);
+clist * insert(clist *,int,int);
+clist * delete(clist *,int);
+void print(clist *);
+int count(clist *);
+void freeall(clist *);
+void create(clist *p,int n)
+{
+	int x,i;
+	clist *q;
+	for(i=1;i<=n;i++)
+	{
+		printf("Enter value ");
+		scanf("%d",&x);
+		p->data=x;
+		if(i!=n)
+		{
+			q=(clist *)malloc(sizeof(clist));
+			if(q==NULL)
+			{
+				printf("Sorry!!");
+				exit(0);
+			}
+			q->next=p->next;
+			p->next=q;
+			p=q;
+		}
+	}
+}
+clist * insert(clist *p,int x,int pos)
+{
+	clist *q=(clist *)malloc(sizeof(clist)),*r=p;
+	if(q==NULL)
+	{
+		printf("Sory!!");
+		exit(0);
+	}
+	q->data=x;
+	if(pos==1)
+	{
+		q->next=p;
+		while(p->next!=r)
+			p=p->next;
+		p->next=q;
+		r=q;
+	}
+	else if(pos==(count(p)+1))
+	{
+		while(p->next!=r)
+			p=p->next;
+		q->next=r;
+		p->next=q;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			ct++;
+			p=p->next;
+		}
+		q->next=p->next;
+		p->next=q;
+	}
+	return r;
+}
+clist * delete(clist *p,int pos)
+{
+	clist *q=p,*r=p;
+	if(pos==1)
+	{
+		q=p->next;
+		while(r->next!=p)
+			r=r->next;
+		r->next=q;
+		free(p);
+		r=q;
+	}
+	else if(pos==count(p))
+	{
+		while(p->next->next!=r)
+			p=p->next;
+		q=p->next;
+		free(q);
+		p->next=r;
+	}
+	else
+	{
+		int ct=2;
+		while(ct!=pos)
+		{
+			p=p->next;
+			ct++;
+		}
+		q=p->next;
+		p->next=p->next->next;
+		free(q);
+	}
+	return r;
+}
+void print(clist *p)
+{
+	clist *r=p;
+	printf("The list contains ");
+	printf("%d ",p->data);
+	p=p->next;
+	while(p!=r)
+	{
+		printf("%d ",p->data);
+		p=p->next;
+	}
+	printf("\n");
+}
+int count(clist *p)
+{
+	clist *r=p->next;
+	int ct=1;
+	while(p!=r)
+	{
+		ct++;
+		r=r->next;
+	}
+	return ct;
+}
+void freeall(clist *p)
+{
+	clist *q,*r=p;
+	p=p->next;
+	while(p!=r)
+	{
+		q=p;
+		p=p->next;
+		free(q);
+	}
+	free(r);
+}
